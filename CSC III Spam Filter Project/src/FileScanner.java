@@ -1,7 +1,7 @@
-import java.util.*;
-import java.io.*;
-import java.util.ArrayList;
+import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.ArrayList;
+import java.util.Scanner;
 
 public class FileScanner {
     public static void main(String[] args) {
@@ -15,12 +15,30 @@ public class FileScanner {
             System.out.println("Spam file not found");
         }
 
+        int spamCount = 0;
+        int hamCount = 0;
         for(int i = 0; i < mainStorage.size(); i++){
             FeatureExtractor test = new FeatureExtractor(mainStorage.get(i));
-            if(test.isHam) System.out.println("Ham");
-            else System.out.println("Spam");
-        }
+            test.wordCount();
+            test.wordLength();
+            test.hyperLinkCheck();
+            test.specialCharaters();
+            test.repeatedWords();
+            test.triggerWords();
+            test.caseSensitivity();
+            test.scoreChecker();
 
+            if(test.isHam){
+                hamCount++;
+                System.out.println("Ham" + test.email.getLabel());
+            }
+            else {
+                spamCount++;
+                System.out.println("Spam" + test.email.getLabel());
+            }
+        }
+        System.out.println("the amount of spams: " + spamCount);
+        System.out.println("the amount of hams: " + hamCount);
     }
     public static ArrayList<EmailStorage> readFile(String name) throws FileNotFoundException {
         File fileName = new File(name);

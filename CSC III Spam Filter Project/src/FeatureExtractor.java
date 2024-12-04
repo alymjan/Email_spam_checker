@@ -5,7 +5,7 @@ import java.util.Scanner;
 public class FeatureExtractor {
     EmailStorage email;
     int score;
-    boolean isHam;
+    public boolean isHam;
     public FeatureExtractor(EmailStorage email) {
         this.email = email;
         score = 0;
@@ -19,43 +19,60 @@ public class FeatureExtractor {
             score++;
         }
     }
-    public void URLcheck() {
+    public void hyperLinkCheck() {
         ArrayList<String> arr = new ArrayList<>(email.getWord());
         for (int i = 0; i < arr.size(); i++) {
-            if (arr.get(i).equals("URL")) {
+            if (arr.get(i).equalsIgnoreCase("hyperlink")) {
                 score++;
+                break;
             }
         }
     }
     public void wordLength() {
+        int breakOut = 0;
         for (int i = 0; i < email.getWord().size(); i++) {
-            if (email.getWord().get(i).length() > 45) score++;
+            if(breakOut > 3) {
+                score++;
+                break;
+            }
+            if (email.getWord().get(i).length() > 12) breakOut++;
         }
     }
     public void specialCharaters() {
+        int breakOut = 0;
         for (int i = 0; i < email.getWord().size(); i++) {
             String str = email.getWord().get(i).toUpperCase();
             for (int j = 0; j < str.length(); j++) {
                 char currentChar = str.charAt(j);
                 if (!Character.isLetter(currentChar)) {
                     if (currentChar != ',' && currentChar != '.' && currentChar != '?'
-                            && currentChar != '!' && currentChar != '\'') {
-                        score++;
+                            && currentChar != '!' && currentChar != '\'' && currentChar != '_') {
+                        breakOut++;
                     }
                 }
             }
         }
+        if(breakOut > 4){//might need to be adjusted
+            score++;
+        }
     }
     public void repeatedWords() {
+        int breakout = 0;
         for (int i = 0; i < email.getWord().size() - 1; i++) {
             String current = email.getWord().get(i);
             String next = email.getWord().get(i + 1);
-            if (current.equals(next) && !current.equals("NUMBER")) score++;
+            if (current.equals(next) && !current.equalsIgnoreCase("NUMBER")){
+                breakout++;
+            }
+            if(breakout > 3){
+                score++;
+                break;
+            }
         }
     }
     public void triggerWords() {
         try {
-            File file = new File("1.csv");
+            File file = new File("C:\\Users\\Admin\\Documents\\GitHub\\Email_spam_checker\\CSC III Spam Filter Project\\1.csv");
             Scanner sc = new Scanner(file);
             int count = 0;
             for (int i = 0; i < email.getWord().size(); i++) {
@@ -65,7 +82,7 @@ public class FeatureExtractor {
                     if(str.equals(trigger)) count++;
                 }
             }
-            if(count > 10) score++;
+            if(count > 3) score++;
         } catch (FileNotFoundException e) {
                 System.out.print("File 1.csv not found");
         }
@@ -80,7 +97,7 @@ public class FeatureExtractor {
                     char currentChar = str.charAt(j);
                         if (Character.isUpperCase(currentChar)) {
                             caseSens++;
-                            if(caseSens > 5){
+                            if(caseSens > 3){
                                 score++;
                                 break;
                             }
@@ -90,8 +107,8 @@ public class FeatureExtractor {
         }
     }
     public void scoreChecker(){
-        if(score < 4){
-            isHam = true;   //this will be more properl
+        if(score < 5){
+            isHam = true;
         }
     }
 }
