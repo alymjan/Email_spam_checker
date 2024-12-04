@@ -2,18 +2,27 @@ import java.util.*;
 import java.io.*;
 import java.util.ArrayList;
 import java.io.FileNotFoundException;
+
 public class FileScanner {
     public static void main(String[] args) {
         System.out.println("Please enter file name:");
         Scanner scanner = new Scanner(System.in);
         String fileName = scanner.nextLine();
+        ArrayList<EmailStorage> mainStorage = new ArrayList<>();
         try {
-            readFile(fileName);
+            mainStorage = readFile(fileName);
         } catch (FileNotFoundException e) {
-            System.out.println("File not found");
+            System.out.println("Spam file not found");
         }
+
+        for(int i = 0; i < mainStorage.size(); i++){
+            FeatureExtractor test = new FeatureExtractor(mainStorage.get(i));
+            if(test.isHam) System.out.println("Ham");
+            else System.out.println("Spam");
+        }
+
     }
-    public static void readFile(String name) throws FileNotFoundException {
+    public static ArrayList<EmailStorage> readFile(String name) throws FileNotFoundException {
         File fileName = new File(name);
         try (Scanner scanner = new Scanner(fileName)) {
             ArrayList<EmailStorage> storage = new ArrayList<>();
@@ -39,6 +48,7 @@ public class FileScanner {
                 storage.add(tempStore);
                 labelNumber++;
             }
+            return storage;
         }
     }
 }

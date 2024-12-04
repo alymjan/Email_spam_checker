@@ -5,9 +5,11 @@ import java.util.Scanner;
 public class FeatureExtractor {
     EmailStorage email;
     int score;
+    boolean isHam;
     public FeatureExtractor(EmailStorage email) {
         this.email = email;
         score = 0;
+        isHam = false;
     }
     public void wordCount() {
         int min = 20;
@@ -53,7 +55,7 @@ public class FeatureExtractor {
     }
     public void triggerWords() {
         try {
-            File file = new File("1");
+            File file = new File("1.csv");
             Scanner sc = new Scanner(file);
             int count = 0;
             for (int i = 0; i < email.getWord().size(); i++) {
@@ -65,7 +67,7 @@ public class FeatureExtractor {
             }
             if(count > 10) score++;
         } catch (FileNotFoundException e) {
-            System.out.print("File not found");
+                System.out.print("File 1.csv not found");
         }
     }
     public void caseSensitivity() {
@@ -88,10 +90,8 @@ public class FeatureExtractor {
         }
     }
     public void scoreChecker(){
-        if(score > 4){
-            System.out.println("spam");//this will be more properl
-        }else{
-            System.out.println("not spam");//this will be more properl
+        if(score < 4){
+            isHam = true;   //this will be more properl
         }
     }
 }
