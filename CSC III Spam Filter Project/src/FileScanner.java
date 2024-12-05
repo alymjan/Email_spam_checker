@@ -1,3 +1,13 @@
+/*
+This is our FileScanner
+It reads the file and stores each email and it's words as
+an ArrayList in EmailStorage class.
+This also was our class where we checked our FeatureExtractor
+and that is why it contains the main method.
+*/
+
+
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
@@ -14,33 +24,8 @@ public class FileScanner {
         } catch (FileNotFoundException e) {
             System.out.println("Spam file not found");
         }
-
-        int spamCount = 0;
-        int hamCount = 0;
-        for(int i = 0; i < mainStorage.size(); i++){
-            FeatureExtractor test = new FeatureExtractor(mainStorage.get(i));
-            test.wordCount();
-            test.wordLength();
-            test.hyperLinkCheck();
-            test.specialCharaters();
-            test.repeatedWords();
-            test.triggerWords();
-            test.caseSensitivity();
-            test.scoreChecker();
-
-            if(test.isHam){
-                hamCount++;
-                System.out.println("Ham" + test.email.getLabel());
-            }
-            else {
-                spamCount++;
-                System.out.println("Spam" + test.email.getLabel());
-            }
-        }
-        System.out.println("the amount of spams: " + spamCount);
-        System.out.println("the amount of hams: " + hamCount);
     }
-    public static ArrayList<EmailStorage> readFile(String name) throws FileNotFoundException {
+    public static ArrayList<EmailStorage> readFile(String name) throws FileNotFoundException { // this method reads the file and stores each email as an EmailStorage type ArrayList
         File fileName = new File(name);
         try (Scanner scanner = new Scanner(fileName)) {
             ArrayList<EmailStorage> storage = new ArrayList<>();

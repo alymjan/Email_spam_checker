@@ -1,3 +1,10 @@
+/*
+This class stores each word of an email
+as a String type arrayList and assigns a
+label to the whole class for better access
+ */
+
+
 import java.util.ArrayList;
 
 public class EmailStorage {
