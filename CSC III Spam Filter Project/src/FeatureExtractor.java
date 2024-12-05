@@ -1,7 +1,6 @@
 /*
 This is a feature extractor. We used this clas
 to determine which one of our methods were useful
-and which ones were redundant.
  */
 
 import java.io.File;
